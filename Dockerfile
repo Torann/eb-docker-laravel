@@ -19,8 +19,8 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/ext-imagick.ini
 
 # Install wkhtmltopdf
-RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.jessie_amd64.deb
-RUN gdebi --n wkhtmltox_0.12.5-1.jessie_amd64.deb
+RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb
+RUN gdebi --n wkhtmltox_0.12.5-1.stretch_amd64.deb
 
 RUN mkdir -p /var/log/php-app
 RUN chown www-data:www-data /var/log/php-app
