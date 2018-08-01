@@ -21,7 +21,7 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     && docker-php-ext-install pdo \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install pdo_pgsql \
-    && docker-php-ext-install zip
+    && docker-php-ext-install zip \
     ## APCu
     && pecl install apcu \
     && docker-php-ext-enable apcu \
