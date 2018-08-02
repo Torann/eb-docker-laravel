@@ -4,7 +4,7 @@ COPY config/custom.ini /usr/local/etc/php/conf.d/
 
 RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev libpq-dev wget gdebi \
     libfreetype6 xfonts-base xfonts-75dpi fonts-wqy-microhei ttf-wqy-microhei fonts-wqy-zenhei ttf-wqy-zenhei \
-    ghostscript libgs-dev gs-esp \
+    ghostscript libgs-dev \
     libmagickwand-dev libmagickcore-dev imagemagick \
     --no-install-recommends \
     && docker-php-ext-configure intl \
