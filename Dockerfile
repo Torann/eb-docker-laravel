@@ -6,6 +6,7 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     libfreetype6 xfonts-base xfonts-75dpi fonts-wqy-microhei ttf-wqy-microhei fonts-wqy-zenhei ttf-wqy-zenhei \
     ghostscript libgs-dev \
     libmagickwand-dev libmagickcore-dev imagemagick \
+    git \
     --no-install-recommends \
     && docker-php-ext-configure intl \
     && docker-php-ext-install zip \
