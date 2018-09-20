@@ -4,7 +4,6 @@ COPY config/custom.ini /usr/local/etc/php/conf.d/
 
 RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev libpq-dev wget gdebi \
     libfreetype6 xfonts-base xfonts-75dpi fonts-wqy-microhei ttf-wqy-microhei fonts-wqy-zenhei ttf-wqy-zenhei \
-    freetype freetype-dev libjpeg-turbo libjpeg-turbo-dev libjpeg \
     ghostscript libgs-dev \
     libmagickwand-dev libmagickcore-dev imagemagick \
     git \
@@ -30,6 +29,9 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     ## APCu
     && pecl install apcu \
     && docker-php-ext-enable apcu \
+    # GD
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd \
     # Image Magick
     && pecl install imagick \
     && docker-php-ext-enable imagick \
