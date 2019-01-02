@@ -37,6 +37,12 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     && docker-php-ext-enable imagick \
     && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/ext-imagick.ini
 
+# Install Supervisor.
+RUN \
+  apt-get install -y supervisor && \
+  rm -rf /var/lib/apt/lists/* && \
+  sed -i 's/^\(\[supervisord\]\)$/\1\nnodaemon=true/' /etc/supervisor/supervisord.conf
+
 # Install wkhtmltopdf
 RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb
 RUN gdebi --n wkhtmltox_0.12.5-1.stretch_amd64.deb
@@ -48,3 +54,12 @@ RUN chown www-data:www-data /var/log/php-app
 RUN curl -sS https://getcomposer.org/installer | php -- \
         --install-dir=/usr/local/bin \
         --filename=composer
+
+# Define mountable directories.
+VOLUME ["/etc/supervisor/conf.d"]
+
+# Define working directory.
+WORKDIR /etc/supervisor/conf.d
+
+# Define default command.
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
