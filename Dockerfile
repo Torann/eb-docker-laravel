@@ -1,6 +1,11 @@
 FROM php:7.1-fpm
 
-COPY config/custom.ini /usr/local/etc/php/conf.d/
+## PHP Config
+COPY config/php/custom.ini /usr/local/etc/php/conf.d/
+
+## Supervisor
+COPY config/supervisor/init.d/supervisord /etc/init.d/
+COPY config/supervisor/sysconfig/supervisord /etc/sysconfig/
 
 RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev libpq-dev wget gdebi \
     libfreetype6 xfonts-base xfonts-75dpi fonts-wqy-microhei ttf-wqy-microhei fonts-wqy-zenhei ttf-wqy-zenhei \
