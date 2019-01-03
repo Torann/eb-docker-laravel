@@ -1,12 +1,20 @@
 FROM php:7.1-fpm
 
-## PHP Config
+##############
+# COPY FILES #
+##############
+
+# php
 COPY config/php/custom.ini /usr/local/etc/php/conf.d/
 
-## Supervisor
+# supervisor
 COPY config/supervisor/init.d/supervisord /etc/init.d/
-COPY config/supervisor/sysconfig/supervisord /etc/sysconfig/
-COPY config/supervisor/conf.d/default.conf /etc/supervisor/conf.d/
+COPY config/supervisor/supervisor.conf /etc/supervisor/
+
+
+########################
+# INSTALL DEPENDENCIES #
+########################
 
 RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev libpq-dev wget gdebi \
     libfreetype6 xfonts-base xfonts-75dpi fonts-wqy-microhei ttf-wqy-microhei fonts-wqy-zenhei ttf-wqy-zenhei \
@@ -43,26 +51,44 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     && docker-php-ext-enable imagick \
     && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/ext-imagick.ini
 
-# Install Supervisor.
-RUN \
-  apt-get install -y supervisor && \
-  rm -rf /var/lib/apt/lists/* && \
-  sed -i 's/^\(\[supervisord\]\)$/\1\nnodaemon=true/' /etc/supervisor/supervisord.conf
 
-# Install wkhtmltopdf
+######################
+# INSTALL SUPERVISOR #
+######################
+
+RUN apt-get install -y supervisor
+
+# directory for supervised containers
+RUN mkdir -p /etc/supervisor/conf.d
+
+
+#######################
+# INSTALL WKHTMLTOPDF #
+#######################
+
 RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb
 RUN gdebi --n wkhtmltox_0.12.5-1.stretch_amd64.deb
+
+
+#################
+# SETUP LOGGING #
+#################
 
 RUN mkdir -p /var/log/php-app
 RUN chown www-data:www-data /var/log/php-app
 
-# Install Composer
+
+####################
+# INSTALL COMPOSER #
+####################
+
 RUN curl -sS https://getcomposer.org/installer | php -- \
         --install-dir=/usr/local/bin \
         --filename=composer
 
-# Define mountable directories.
-VOLUME ["/etc/supervisor/conf.d"]
 
-# Define default command.
-CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+###################
+# DEFAULT COMMAND #
+###################
+
+CMD ["supervisord", "-c", "/etc/supervisor/supervisor.conf"]
