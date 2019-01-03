@@ -60,6 +60,14 @@ COPY config/supervisor/conf.d/ /etc/supervisor/conf.d/
 COPY config/supervisor/supervisord.conf /etc/supervisor/
 
 
+################
+# INSTALL CRON #
+################
+
+RUN apt-get install -y cron
+RUN mkdir -p /etc/cron.d
+
+
 #######################
 # INSTALL WKHTMLTOPDF #
 #######################
