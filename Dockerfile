@@ -1,15 +1,11 @@
 FROM php:7.1-fpm
 
-##############
-# COPY FILES #
-##############
+#############
+# PHP SETUP #
+#############
 
-# php
+# copy config
 COPY config/php/custom.ini /usr/local/etc/php/conf.d/
-
-# supervisor
-COPY config/supervisor/init.d/supervisord /etc/init.d/
-COPY config/supervisor/supervisor.conf /etc/supervisor/
 
 
 ########################
@@ -60,6 +56,9 @@ RUN apt-get install -y supervisor
 
 # directory for supervised containers
 RUN mkdir -p /etc/supervisor/conf.d
+
+# copy config
+COPY config/supervisor/supervisor.conf /etc/supervisor/
 
 
 #######################
