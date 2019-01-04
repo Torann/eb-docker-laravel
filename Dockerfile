@@ -77,8 +77,17 @@ RUN gdebi --n wkhtmltox_0.12.5-1.stretch_amd64.deb
 # SETUP LOGGING #
 #################
 
+# create the php application log
 RUN mkdir -p /var/log/php-app
 RUN chown www-data:www-data /var/log/php-app
+
+# create the php log
+RUN mkdir -p /var/log/php-fpm
+RUN chown www-data:www-data /var/log/php-fpm
+
+# create the cron log
+RUN mkdir -p /var/log/cron
+RUN chown www-data:www-data /var/log/cron
 
 
 ####################
