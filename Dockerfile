@@ -56,7 +56,6 @@ RUN apt-get install -y supervisor
 
 # add supervised configs
 COPY config/supervisor/ /etc/supervisor/
-RUN ls -la /etc/supervisor/*
 
 ################
 # INSTALL CRON #
@@ -89,6 +88,13 @@ RUN chown www-data:www-data /var/log/php-app
 RUN curl -sS https://getcomposer.org/installer | php -- \
         --install-dir=/usr/local/bin \
         --filename=composer
+
+
+################################
+# Define Mountable Directories #
+################################
+
+VOLUME ["/etc/supervisor/conf.d"]
 
 
 ###################
