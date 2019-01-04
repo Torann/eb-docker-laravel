@@ -17,6 +17,7 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     ghostscript libgs-dev \
     libmagickwand-dev libmagickcore-dev imagemagick \
     git \
+    nano \
     --no-install-recommends \
     && docker-php-ext-configure intl \
     && docker-php-ext-install zip \
