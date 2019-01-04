@@ -55,10 +55,8 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
 RUN apt-get install -y supervisor
 
 # add supervised configs
-RUN mkdir -p /etc/supervisor/conf.d
-COPY config/supervisor/conf.d/default.conf /etc/supervisor/conf.d/
-COPY config/supervisor/supervisord.conf /etc/supervisor/
-
+COPY config/supervisor/ /etc/supervisor/
+RUN ls -la /etc/supervisor/*
 
 ################
 # INSTALL CRON #
