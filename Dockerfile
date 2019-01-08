@@ -45,8 +45,7 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     && docker-php-ext-install -j$(nproc) gd \
     # Image Magick
     && pecl install imagick \
-    && docker-php-ext-enable imagick \
-    && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/ext-imagick.ini
+    && docker-php-ext-enable imagick
 
 
 ######################
