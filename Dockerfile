@@ -1,4 +1,4 @@
-FROM php:7.1-fpm
+FROM php:7.3.4-fpm
 
 #############
 # PHP SETUP #
@@ -14,6 +14,7 @@ COPY config/php/custom.ini /usr/local/etc/php/conf.d/
 
 RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev libpq-dev wget gdebi xmlstarlet \
     libfreetype6 xfonts-base xfonts-75dpi fonts-wqy-microhei ttf-wqy-microhei fonts-wqy-zenhei ttf-wqy-zenhei \
+    libhiredis-dev \
     ghostscript libgs-dev \
     jpegoptim pngquant \
     libmagickwand-dev libmagickcore-dev imagemagick \
@@ -21,7 +22,6 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     nano \
     --no-install-recommends \
     && docker-php-ext-configure intl \
-    && docker-php-ext-install zip \
     && docker-php-ext-install xml \
     && docker-php-ext-install bcmath \
     && docker-php-ext-install ctype \
@@ -37,6 +37,7 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     && docker-php-ext-install pdo \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install pdo_pgsql \
+    && docker-php-ext-install redis \
     && docker-php-ext-install zip \
     ## APCu
     && pecl install apcu \
@@ -47,6 +48,18 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     # Image Magick
     && pecl install imagick \
     && docker-php-ext-enable imagick
+
+
+###############################
+# BUILD AND INSTALL PHPIREDIS #
+###############################
+
+RUN git clone https://github.com/nrk/phpiredis.git ./phpiredis
+RUN (cd ./phpiredis && phpize && ./configure --enable-phpiredis)
+RUN make --directory=./phpiredis && make --directory=./phpiredis install
+RUN echo "extension=phpiredis.so" >> /etc/php/7.3/mods-available/phpiredis.ini
+RUN phpenmod phpiredis
+RUN rm -rf ./phpiredis
 
 
 ######################
