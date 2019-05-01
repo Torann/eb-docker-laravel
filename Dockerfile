@@ -37,7 +37,6 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     && docker-php-ext-install pdo \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install pdo_pgsql \
-    && docker-php-ext-install redis \
     && docker-php-ext-install zip \
     ## APCu
     && pecl install apcu \
@@ -45,9 +44,12 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     # GD
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
-    # Image Magick
+    # ImageMagick
     && pecl install imagick \
-    && docker-php-ext-enable imagick
+    && docker-php-ext-enable imagick \
+    # Redis
+    && pecl install -o -f redis \
+    &&  docker-php-ext-enable redis
 
 
 ###############################
@@ -57,7 +59,7 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
 RUN git clone https://github.com/nrk/phpiredis.git ./phpiredis
 RUN (cd ./phpiredis && phpize && ./configure --enable-phpiredis)
 RUN make --directory=./phpiredis && make --directory=./phpiredis install
-RUN echo "extension=phpiredis.so" >> /etc/php/7.3/mods-available/phpiredis.ini
+RUN echo "extension=phpiredis.so" >> /usr/local/etc/php/conf.d/phpiredis.ini
 RUN phpenmod phpiredis
 RUN rm -rf ./phpiredis
 
