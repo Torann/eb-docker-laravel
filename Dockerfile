@@ -56,12 +56,17 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
 # BUILD AND INSTALL PHPIREDIS #
 ###############################
 
-RUN git clone https://github.com/nrk/phpiredis.git ./phpiredis
-RUN (cd ./phpiredis && phpize && ./configure --enable-phpiredis)
-RUN make --directory=./phpiredis && make --directory=./phpiredis install
-RUN echo "extension=phpiredis.so" >> /usr/local/etc/php/conf.d/phpiredis.ini
-RUN phpenmod phpiredis
-RUN rm -rf ./phpiredis
+RUN git clone https://github.com/nrk/phpiredis.git ./phpiredis \
+    && ( \
+        cd ./phpiredis \
+        && phpize \
+        && ./configure --enable-phpiredis \
+        && make
+        && make install \
+    ) \
+    && rm -rf phpiredis \
+    && echo "extension=phpiredis.so" >> /usr/local/etc/php/conf.d/phpiredis.ini \
+    && docker-php-ext-enable phpiredis
 
 
 ######################
