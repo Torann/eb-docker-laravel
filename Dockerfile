@@ -61,7 +61,7 @@ RUN git clone https://github.com/nrk/phpiredis.git ./phpiredis \
         cd ./phpiredis \
         && phpize \
         && ./configure --enable-phpiredis \
-        && make
+        && make \
         && make install \
     ) \
     && rm -rf phpiredis \
