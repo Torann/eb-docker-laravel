@@ -134,4 +134,6 @@ VOLUME ["/etc/supervisor/conf.d"]
 # DEFAULT COMMAND #
 ###################
 
+EXPOSE 9000 8022
+
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
