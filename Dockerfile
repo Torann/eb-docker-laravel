@@ -1,4 +1,4 @@
-FROM php:7.1-fpm
+FROM php:7.3.4-fpm
 
 #############
 # PHP SETUP #
@@ -14,6 +14,7 @@ COPY config/php/custom.ini /usr/local/etc/php/conf.d/
 
 RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev libpq-dev wget gdebi xmlstarlet \
     libfreetype6 xfonts-base xfonts-75dpi fonts-wqy-microhei ttf-wqy-microhei fonts-wqy-zenhei ttf-wqy-zenhei \
+    libhiredis-dev libzip-dev \
     ghostscript libgs-dev \
     jpegoptim pngquant \
     libmagickwand-dev libmagickcore-dev imagemagick \
@@ -21,7 +22,6 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     nano \
     --no-install-recommends \
     && docker-php-ext-configure intl \
-    && docker-php-ext-install zip \
     && docker-php-ext-install xml \
     && docker-php-ext-install bcmath \
     && docker-php-ext-install ctype \
@@ -44,9 +44,29 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     # GD
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
-    # Image Magick
+    # ImageMagick
     && pecl install imagick \
-    && docker-php-ext-enable imagick
+    && docker-php-ext-enable imagick \
+    # Redis
+    && pecl install -o -f redis \
+    &&  docker-php-ext-enable redis
+
+
+###############################
+# BUILD AND INSTALL PHPIREDIS #
+###############################
+
+RUN git clone https://github.com/nrk/phpiredis.git ./phpiredis \
+    && ( \
+        cd ./phpiredis \
+        && phpize \
+        && ./configure --enable-phpiredis \
+        && make \
+        && make install \
+    ) \
+    && rm -rf phpiredis \
+    && echo "extension=phpiredis.so" >> /usr/local/etc/php/conf.d/phpiredis.ini \
+    && docker-php-ext-enable phpiredis
 
 
 ######################
@@ -113,5 +133,7 @@ VOLUME ["/etc/supervisor/conf.d"]
 ###################
 # DEFAULT COMMAND #
 ###################
+
+EXPOSE 9000 8022
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
