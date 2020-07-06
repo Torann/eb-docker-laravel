@@ -19,7 +19,8 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     jpegoptim pngquant \
     libmagickwand-dev libmagickcore-dev imagemagick \
     git \
-    sudo nano \
+    libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4 chromium-browser xvfb gtk2-engines-pixbuf \
+    xfonts-cyrillic xfonts-100dpi xfonts-scalable imagemagick x11-apps \
     --no-install-recommends \
     && docker-php-ext-configure intl \
     && docker-php-ext-install xml \
@@ -46,47 +47,7 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     && docker-php-ext-install -j$(nproc) gd \
     # ImageMagick
     && pecl install imagick \
-    && docker-php-ext-enable imagick \
-    # Redis
-    && pecl install -o -f redis \
-    && docker-php-ext-enable redis
-
-
-###############################
-# BUILD AND INSTALL PHPIREDIS #
-###############################
-
-RUN git clone https://github.com/nrk/phpiredis.git ./phpiredis \
-    && ( \
-        cd ./phpiredis \
-        && phpize \
-        && ./configure --enable-phpiredis \
-        && make \
-        && make install \
-    ) \
-    && rm -rf phpiredis \
-    && echo "extension=phpiredis.so" >> /usr/local/etc/php/conf.d/phpiredis.ini \
-    && docker-php-ext-enable phpiredis
-
-
-######################
-# INSTALL SUPERVISOR #
-######################
-
-RUN apt-get install -y supervisor && \
-  mkdir -p /var/log/supervisor && \
-  mkdir -p /etc/supervisor/conf.d
-
-# add supervised configs
-COPY config/supervisor/supervisord.conf /etc/supervisor/
-
-
-################
-# INSTALL CRON #
-################
-
-RUN apt-get install -y cron
-RUN mkdir -p /etc/cron.d
+    && docker-php-ext-enable imagick
 
 
 #######################
@@ -95,23 +56,6 @@ RUN mkdir -p /etc/cron.d
 
 RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb
 RUN gdebi --n wkhtmltox_0.12.5-1.stretch_amd64.deb
-
-
-#################
-# SETUP LOGGING #
-#################
-
-# create the php application log
-RUN mkdir -p /var/log/php-app
-RUN chown www-data:www-data /var/log/php-app
-
-# create the php log
-RUN mkdir -p /var/log/php-fpm
-RUN chown www-data:www-data /var/log/php-fpm
-
-# create the cron log
-RUN mkdir -p /var/log/cron
-RUN chown www-data:www-data /var/log/cron
 
 
 ####################
@@ -123,17 +67,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
         --filename=composer
 
 
-################################
-# Define Mountable Directories #
-################################
-
-VOLUME ["/etc/supervisor/conf.d"]
-
-
 ###################
 # DEFAULT COMMAND #
 ###################
 
 EXPOSE 9000 8022
-
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
