@@ -19,8 +19,8 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     jpegoptim pngquant \
     libmagickwand-dev libmagickcore-dev imagemagick \
     git \
-    libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4 chromium xvfb gtk2-engines-pixbuf \
-    xfonts-cyrillic xfonts-100dpi xfonts-scalable imagemagick x11-apps \
+    libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4 chromium chromium-l10n xvfb gtk2-engines-pixbuf \
+    libcanberra-gtk-module libexif-dev xfonts-cyrillic xfonts-100dpi xfonts-scalable imagemagick x11-apps \
     --no-install-recommends \
     && docker-php-ext-configure intl \
     && docker-php-ext-install xml \
@@ -72,3 +72,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 ###################
 
 EXPOSE 9000 8022
+
+####################
+# AUTORUN CHROMIUM #
+####################
+
+CMD ["/usr/bin/chromium", "--no-sandbox", "--user-data-dir=/data"]
