@@ -1,5 +1,7 @@
 FROM php:7.3.9-fpm
 
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
 #############
 # PHP SETUP #
 #############
@@ -73,8 +75,4 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 
 EXPOSE 9000 8022
 
-####################
-# AUTORUN CHROMIUM #
-####################
-
-CMD ["/usr/bin/chromium", "--no-sandbox", "--user-data-dir=/data"]
+RUN Xvfb -ac :0 -screen 0 1280x1024x16 &
