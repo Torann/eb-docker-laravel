@@ -1,4 +1,4 @@
-FROM php:7.3.9-fpm
+FROM php:7.4.10-fpm
 
 #############
 # PHP SETUP #
