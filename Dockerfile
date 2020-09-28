@@ -1,4 +1,4 @@
-FROM php:7.3.9-fpm
+FROM php:7.4.10-fpm
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
@@ -16,7 +16,7 @@ COPY config/php/custom.ini /usr/local/etc/php/conf.d/
 
 RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev libpq-dev wget gdebi xmlstarlet \
     libfreetype6 xfonts-base xfonts-75dpi fonts-wqy-microhei ttf-wqy-microhei fonts-wqy-zenhei ttf-wqy-zenhei \
-    libhiredis-dev libzip-dev \
+    libhiredis-dev libzip-dev libonig-dev \
     ghostscript libgs-dev \
     jpegoptim pngquant \
     libmagickwand-dev libmagickcore-dev imagemagick \
@@ -45,7 +45,7 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     && pecl install apcu \
     && docker-php-ext-enable apcu \
     # GD
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     # ImageMagick
     && pecl install imagick \
