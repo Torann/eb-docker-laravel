@@ -14,7 +14,7 @@ COPY config/php/custom.ini /usr/local/etc/php/conf.d/
 
 RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev libpq-dev wget gdebi xmlstarlet \
     libfreetype6 xfonts-base xfonts-75dpi fonts-wqy-microhei ttf-wqy-microhei fonts-wqy-zenhei ttf-wqy-zenhei \
-    libhiredis-dev libzip-dev \
+    libhiredis-dev libzip-dev libonig-dev \
     ghostscript libgs-dev \
     jpegoptim pngquant \
     libmagickwand-dev libmagickcore-dev imagemagick \
