@@ -20,7 +20,7 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     ghostscript libgs-dev \
     jpegoptim pngquant \
     libmagickwand-dev libmagickcore-dev imagemagick \
-    git mysql-client \
+    git default-mysql-client \
     --no-install-recommends \
     && docker-php-ext-configure intl \
     && docker-php-ext-install xml \
