@@ -18,7 +18,7 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     ghostscript libgs-dev \
     jpegoptim pngquant \
     libmagickwand-dev libmagickcore-dev imagemagick \
-    git \
+    git default-mysql-client \
     sudo nano \
     --no-install-recommends \
     && docker-php-ext-configure intl \
