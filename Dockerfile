@@ -20,8 +20,7 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     ghostscript libgs-dev \
     jpegoptim pngquant \
     libmagickwand-dev libmagickcore-dev imagemagick \
-    git \
-    libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4 chromium chromium-l10n xvfb gtk2-engines-pixbuf \
+    git mysql-client \
     --no-install-recommends \
     && docker-php-ext-configure intl \
     && docker-php-ext-install xml \
@@ -40,8 +39,6 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install pdo_pgsql \
     && docker-php-ext-install zip \
-    ## Testing
-    && mysql-client \
     ## APCu
     && pecl install apcu \
     && docker-php-ext-enable apcu \
@@ -51,6 +48,15 @@ RUN apt-get clean && apt-get update && apt-get install -y zlib1g-dev libicu-dev 
     # ImageMagick
     && pecl install imagick \
     && docker-php-ext-enable imagick
+
+
+#######################
+# TESTING             #
+#######################
+
+RUN apt-get clean && apt-get update && apt-get install -y libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4 \
+    chromium chromium-l10n xvfb gtk2-engines-pixbuf \
+    --no-install-recommends
 
 
 #######################
