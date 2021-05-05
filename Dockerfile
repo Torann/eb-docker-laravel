@@ -1,4 +1,4 @@
-FROM php:7.4.10-fpm
+FROM php:8.0.5-fpm
 
 #############
 # PHP SETUP #
@@ -93,8 +93,8 @@ RUN mkdir -p /etc/cron.d
 # INSTALL WKHTMLTOPDF #
 #######################
 
-RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb
-RUN gdebi --n wkhtmltox_0.12.5-1.stretch_amd64.deb
+RUN wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.stretch_amd64.deb
+RUN gdebi --n wkhtmltox_0.12.6-1.stretch_amd64.deb
 
 
 #################
