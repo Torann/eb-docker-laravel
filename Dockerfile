@@ -84,6 +84,20 @@ RUN set -ex; \
     curl -fsSL https://github.com/Imagick/imagick/archive/06116aa24b76edaf6b1693198f79e6c295eda8a9.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1; \
     docker-php-ext-install imagick; \
     \
+    # build and install phpiredis
+    # use github version for now until release from https://pecl.php.net/get/imagick is ready for PHP 8
+    git clone https://github.com/nrk/phpiredis.git ./phpiredis \
+    && ( \
+        cd ./phpiredis \
+        && phpize \
+        && ./configure --enable-phpiredis \
+        && make \
+        && make install \
+    ) \
+    && rm -rf phpiredis \
+    && echo "extension=phpiredis.so" >> /usr/local/etc/php/conf.d/phpiredis.ini \
+    && docker-php-ext-enable phpiredis \
+    \
     # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
     # see https://github.com/docker-library/wordpress/blob/master/Dockerfile-debian.template
     apt-mark auto '.*' > /dev/null; \
@@ -98,23 +112,6 @@ RUN set -ex; \
     \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
     rm -rf /var/lib/apt/lists/*
-
-
-###############################
-# BUILD AND INSTALL PHPIREDIS #
-###############################
-
-RUN git clone https://github.com/nrk/phpiredis.git ./phpiredis \
-    && ( \
-        cd ./phpiredis \
-        && phpize \
-        && ./configure --enable-phpiredis \
-        && make \
-        && make install \
-    ) \
-    && rm -rf phpiredis \
-    && echo "extension=phpiredis.so" >> /usr/local/etc/php/conf.d/phpiredis.ini \
-    && docker-php-ext-enable phpiredis
 
 
 ######################
