@@ -22,10 +22,12 @@ RUN set -eux; \
         jpegoptim \
         pngquant \
         unzip \
+        cron \
         wget \
         git \
         default-mysql-client \
         sudo \
+        gdebi \
         nano \
     ; \
     rm -rf /var/lib/apt/lists/*
@@ -50,7 +52,6 @@ RUN set -ex; \
         zlib1g-dev \
         libicu-dev \
         libpq-dev \
-        gdebi \
         libhiredis-dev \
         libonig-dev \
         libgs-dev \
@@ -120,9 +121,9 @@ RUN set -ex; \
 RUN docker-php-ext-enable phpiredis
 
 
-######################
-# INSTALL SUPERVISOR #
-######################
+####################
+# SETUP SUPERVISOR #
+####################
 
 RUN mkdir -p /var/log/supervisor && \
   mkdir -p /etc/supervisor/conf.d
@@ -131,11 +132,10 @@ RUN mkdir -p /var/log/supervisor && \
 COPY config/supervisor/supervisord.conf /etc/supervisor/
 
 
-################
-# INSTALL CRON #
-################
+##############
+# SETUP CRON #
+##############
 
-RUN apt-get install -y cron
 RUN mkdir -p /etc/cron.d
 
 
