@@ -30,6 +30,7 @@ COPY config/php/custom.ini /usr/local/etc/php/conf.d/
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --quiet --no-install-recommends \
+        libfreetype6 xfonts-base xfonts-75dpi fonts-wqy-microhei ttf-wqy-microhei fonts-wqy-zenhei ttf-wqy-zenhei \
         ghostscript \
         #supervisor \
         xmlstarlet \
@@ -66,7 +67,6 @@ RUN set -ex; \
     # see https://manpages.debian.org/stretch/apt/apt-get.8.en.html
     apt-get update; \
     apt-get install -y --quiet --no-install-recommends \
-        libfreetype6 xfonts-base xfonts-75dpi fonts-wqy-microhei ttf-wqy-microhei fonts-wqy-zenhei ttf-wqy-zenhei \
         libjpeg-dev \
         libmagickwand-dev \
         libmcrypt-dev \
