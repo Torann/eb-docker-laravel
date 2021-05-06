@@ -1,16 +1,24 @@
 FROM php:8.0.5-fpm
 
-######################
+###############################################################################
 # CIRCLECI DOCKER
+###############################################################################
+#
+# This lists the difference between the AWS docker image and the image used on
+# CircleCI. Because we need a few more things and don't need others, we support
+# two different flavors of the basic same docker image.
 #
 # Install
-# - Chromium for Dusk
+# - chromium
+# - composer
 #
 # Remove
 # - supervisor
 # - redis
 # - phpiredis
 # - cron
+#
+###############################################################################
 
 
 #############
