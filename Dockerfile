@@ -28,7 +28,6 @@ RUN set -eux; \
         git \
         default-mysql-client \
         sudo \
-        gdebi \
         nano \
     ; \
     rm -rf /var/lib/apt/lists/*
@@ -55,6 +54,7 @@ RUN set -ex; \
         libhiredis-dev \
         libonig-dev \
         libgs-dev \
+        gdebi \
     ; \
     \
     # install and configure via docker-php-ext
@@ -85,6 +85,10 @@ RUN set -ex; \
     mkdir -p /usr/src/php/ext/imagick; \
     curl -fsSL https://github.com/Imagick/imagick/archive/06116aa24b76edaf6b1693198f79e6c295eda8a9.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1; \
     docker-php-ext-install imagick; \
+    \
+    # install wkhtmltopdf
+    wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.stretch_amd64.deb \
+    gdebi --n wkhtmltox_0.12.6-1.stretch_amd64.deb \
     \
     # compile and install phpiredis
     git clone https://github.com/nrk/phpiredis.git ./phpiredis \
@@ -132,19 +136,11 @@ RUN mkdir -p /var/log/supervisor && \
 COPY config/supervisor/supervisord.conf /etc/supervisor/
 
 
-##############
-# SETUP CRON #
-##############
+#################################
+# SETUP CRON SETTINGS DIRECTORY #
+#################################
 
 RUN mkdir -p /etc/cron.d
-
-
-#######################
-# INSTALL WKHTMLTOPDF #
-#######################
-
-RUN wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.stretch_amd64.deb
-RUN gdebi --n wkhtmltox_0.12.6-1.stretch_amd64.deb
 
 
 #################
