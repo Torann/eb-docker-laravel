@@ -25,6 +25,7 @@ RUN set -eux; \
         unzip \
         cron \
         wget \
+        gdebi \
         git \
         default-mysql-client \
         sudo \
@@ -54,7 +55,6 @@ RUN set -ex; \
         libhiredis-dev \
         libonig-dev \
         libgs-dev \
-        gdebi \
     ; \
     \
     # install and configure via docker-php-ext
@@ -86,10 +86,6 @@ RUN set -ex; \
     curl -fsSL https://github.com/Imagick/imagick/archive/06116aa24b76edaf6b1693198f79e6c295eda8a9.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1; \
     docker-php-ext-install imagick; \
     \
-    # install wkhtmltopdf
-    wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.stretch_amd64.deb \
-    gdebi --n wkhtmltox_0.12.6-1.stretch_amd64.deb \
-    \
     # compile and install phpiredis
     git clone https://github.com/nrk/phpiredis.git ./phpiredis \
     && ( \
@@ -116,6 +112,14 @@ RUN set -ex; \
     \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
     rm -rf /var/lib/apt/lists/*
+
+
+#######################
+# INSTALL WKHTMLTOPDF #
+#######################
+
+RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb
+RUN gdebi --n wkhtmltox_0.12.5-1.stretch_amd64.deb
 
 
 ####################
