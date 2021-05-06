@@ -17,6 +17,7 @@ RUN set -eux; \
     apt-get update; \
     apt-get install -y --quiet --no-install-recommends \
         ghostscript \
+        supervisor \
         xmlstarlet \
         jpegoptim \
         pngquant \
@@ -123,8 +124,7 @@ RUN docker-php-ext-enable phpiredis
 # INSTALL SUPERVISOR #
 ######################
 
-RUN apt-get install -y supervisor && \
-  mkdir -p /var/log/supervisor && \
+RUN mkdir -p /var/log/supervisor && \
   mkdir -p /etc/supervisor/conf.d
 
 # add supervised configs
