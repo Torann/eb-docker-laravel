@@ -31,6 +31,7 @@ RUN set -eux; \
         sudo \
         nano \
     ; \
+    pecl install -o -f redis \
     rm -rf /var/lib/apt/lists/*
 
 # install PHP extensions
@@ -122,11 +123,12 @@ RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkh
 RUN gdebi --n wkhtmltox_0.12.5-1.stretch_amd64.deb
 
 
-####################
-# ENABLE PHPIREDIS #
-####################
+########################
+# ENABLE PHP REDIS EXT #
+########################
 
-RUN docker-php-ext-enable phpiredis
+RUN docker-php-ext-enable redis \
+    docker-php-ext-enable phpiredis
 
 
 ####################
