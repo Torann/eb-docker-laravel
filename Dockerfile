@@ -127,8 +127,7 @@ RUN gdebi --n wkhtmltox_0.12.5-1.stretch_amd64.deb
 # ENABLE PHP REDIS EXT #
 ########################
 
-RUN docker-php-ext-enable redis \
-    docker-php-ext-enable phpiredis
+RUN docker-php-ext-enable redis phpiredis
 
 
 ####################
