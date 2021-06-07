@@ -41,6 +41,7 @@ RUN set -eux; \
         ghostscript \
         #supervisor \
         xmlstarlet \
+        imagemagick \
         jpegoptim \
         pngquant \
         unzip \
